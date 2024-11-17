@@ -1,0 +1,72 @@
+#Create tar file with extention: .tar.gz
+tar -czvf new_zip_file.tar.gz ./folder_or_file_path
+
+#Decompress tar file with extention: .tar.gz
+tar -xzvf compressed_file.tar.gz -C ./folder_or_file_path_to_extract
+
+#Decompress tar file with extention: .gz
+gzip -d ./compressed_file.gz
+
+#Decompress tar file with extention: .zip
+unzip ./compressed_file.zip
+
+# Creates symbolic link
+ln -s <source/existing file> <destination/new file>
+
+#List process containing matched text
+pgrep -ifa process_command_pattern
+ps -ef | grep -i process_command_pattern
+
+# Finding file with extention .log
+find . -name *.log
+
+# SSH into remote linux host
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i private_key_path user_name@host_public_ip
+
+# SCP into remote linux host (From local to remote host)
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i private_key_path ./local_machine_file_path user_name@host_public_ip:path_accessible_to_user
+
+# SCP from remote linux host (From remote host to local)
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i private_key_path user_name@host_public_ip:path_accessible_to_user ./local_machine_file_path
+
+#Installing apt packages (You need sudo)
+sudo apt install package_name
+sudo apt install nginx
+sudo apt install nginx -y
+
+#Update the Package Index/Refreshes the list of available packages and their versions
+sudo apt update
+
+#Upgrade Installed Packages/Upgrades all installed packages to the latest versions
+sudo apt upgrade
+
+#Full System Upgrade/Upgrades packages and removes obsolete ones
+sudo apt full-upgrade
+
+#Removes a package but keeps its configuration files
+sudo apt remove package_name
+
+#Removes a package along with its configuration files
+sudo apt purge package_name
+
+#Searches for a package in the repositories
+apt search package_name
+
+#Displays detailed information about a package
+apt show package_name
+
+#Removes unnecessary packages that were automatically installed as dependencies but are no longer needed
+sudo apt autoremove
+
+#Hold a Package (Prevent Updates) (You need sudo)
+sudo apt-mark hold package_name
+sudo apt-mark hold nginx
+
+#Displays all installed packages
+apt list --installed
+
+#List hold packages
+apt-mark showhold
+
+#Unhold a Package (Allow Updates) (You need sudo)
+sudo apt-mark unhold package_name
