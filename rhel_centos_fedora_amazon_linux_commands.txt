@@ -1,0 +1,60 @@
+#Update the Package Index/Refreshes the list of available packages and their versions
+sudo yum update
+
+#Check if updates are available for installed packages
+yum check-update
+
+#Upgrade Installed Packages/Upgrades all installed packages to the latest versions
+sudo yum upgrade
+sudo yum upgrade package_name
+
+#Installing yum/dnf packages (You need sudo)
+sudo yum install package_name
+sudo yum install nginx
+sudo yum install nginx -y
+
+#Removes a package but keeps its configuration files
+sudo yum remove package_name
+
+#Removes a package along with its configuration files
+sudo yum purge package_name
+
+#Searches for a package in the repositories
+yum search package_name
+yum search nginx
+
+#Displays detailed information about a package
+yum info package_name
+yum info wget
+
+#Removes unnecessary packages that were automatically installed as dependencies but are no longer needed
+sudo yum autoremove
+
+#Hold a Package (Prevent Updates) (You need sudo)
+sudo yum install yum-plugin-versionlock
+
+#Hold a Package (Prevent Updates) (You need sudo)
+sudo yum versionlock add package_name
+sudo yum versionlock add nginx
+
+#View Locked Packages (Allow Updates) (You need sudo)
+sudo yum versionlock list
+
+#Remove a Lock (Allow Updates) (You need sudo)
+sudo yum versionlock delete package_name
+
+#Displays all installed packages
+yum list installed
+yum list installed package_name
+
+#View transaction history
+yum history
+
+#Undo a specific transaction:
+sudo yum history undo transaction_id
+
+#Redo a specific transaction:
+sudo yum history redo transaction_id
+
+#Clear the local cache of package metadata and headers
+sudo yum clean all
