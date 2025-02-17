@@ -1,3 +1,6 @@
+#History size increase
+export HISTFILESIZE=10000000
+
 #Create tar file with extention: .tar.gz
 tar -czvf new_zip_file.tar.gz ./folder_or_file_path
 
@@ -70,3 +73,9 @@ apt-mark showhold
 
 #Unhold a Package (Allow Updates) (You need sudo)
 sudo apt-mark unhold package_name
+
+#Running process on server in background (Allows no active console session)
+nohup ./long_running_script.sh > script_output.log 2>&1 &
+
+Example:
+nohup sudo aws s3 cp /some/path/on/file/system.zip s3://some-s3-bucket/some-folder/ > script_output.log 2>&1 &

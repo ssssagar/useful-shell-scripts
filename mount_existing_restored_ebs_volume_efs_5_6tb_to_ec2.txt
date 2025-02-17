@@ -1,0 +1,101 @@
+Followed below steps along with expected output for attaching existing EBS volume (we created by using an AWS EBS volume snapshot using lvm2 i.e. Logical Volume Manager version 2.
+
+#Show existing partitions with human readable format
+$df -h
+
+#The vgdisplay command displays volume group properties
+$vgdisplay -v
+
+#The lsblk command lists information about block devices on a Linux system
+$lsblk
+NAME          MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+nvme0n1       259:0    0  30G  0 disk
+├─nvme0n1p1   259:1    0  30G  0 part /
+├─nvme0n1p127 259:2    0   1M  0 part
+└─nvme0n1p128 259:3    0  10M  0 part /boot/efi
+nvme1n1       259:4    0  40G  0 disk
+
+#attach ebs volume using aws console/api etc
+$lsblk
+NAME            MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+nvme0n1         259:0    0   30G  0 disk
+├─nvme0n1p1     259:1    0   30G  0 part /
+├─nvme0n1p127   259:2    0    1M  0 part
+└─nvme0n1p128   259:3    0   10M  0 part /boot/efi
+nvme1n1         259:4    0   40G  0 disk
+nvme2n1         259:5    0  5.9T  0 disk
+└─vg00-vol_data 253:0    0  5.9T  0 lvm
+
+#The vgdisplay command displays volume group properties
+$vgdisplay -v
+  --- Volume group ---
+  VG Name               vg00
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  2
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                1
+  Open LV               0
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <5.86 TiB
+  PE Size               4.00 MiB
+  Total PE              1535999
+  Alloc PE / Size       1535999 / <5.86 TiB
+  Free  PE / Size       0 / 0
+  VG UUID               yXR3yV-DeHn-pwF5-i7Fh-b2Vw-CJKm-oEmGAD
+
+  --- Logical volume ---
+  LV Path                /dev/vg00/vol_data
+  LV Name                vol_data
+  VG Name                vg00
+  LV UUID                wT4l9j-PNUA-rNjI-OhtT-KKMi-SsmT-cK0DAH
+  LV Write Access        read/write
+  LV Creation host, time ip-10-250-5-85.ec2.internal, 2024-09-28 11:20:52 +0000
+  LV Status              available
+  # open                 0
+  LV Size                <5.86 TiB
+  Current LE             1535999
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     256
+  Block device           253:0
+
+  --- Physical volumes ---
+  PV Name               /dev/sdd
+  PV UUID               vCvs8U-OhFt-rCaw-1tKN-i91x-0Rmq-N162Us
+  PV Status             allocatable
+  Total PE / Free PE    1535999 / 0
+
+$lsblk -f
+NAME            FSTYPE      FSVER    LABEL UUID                                   FSAVAIL FSUSE% MOUNTPOINTS
+nvme0n1
+├─nvme0n1p1     xfs                  /     1600e074-aa16-449f-b780-97f8a31928c1     24.7G    18% /
+├─nvme0n1p127
+└─nvme0n1p128   vfat        FAT16          5F21-CDC5                                 8.7M    13% /boot/efi
+nvme1n1
+nvme2n1         LVM2_member LVM2 001       vCvs8U-OhFt-rCaw-1tKN-i91x-0Rmq-N162Us
+└─vg00-vol_data ext4        1.0            ad31b330-68d5-46ea-a146-bf3599133764
+
+#Create a mount folder name which is used to mount attached volume on this folder path
+$mkdir -p /var/www
+
+#Mount volume to created folder
+$mount /dev/vg00/vol_data /var/www
+
+#Show existing partitions with human readable format, it will list newly created volume.
+$df -h
+Filesystem                 Size  Used Avail Use% Mounted on
+devtmpfs                   4.0M     0  4.0M   0% /dev
+tmpfs                      453M     0  453M   0% /dev/shm
+tmpfs                      182M  472K  181M   1% /run
+/dev/nvme0n1p1              30G  5.3G   25G  18% /
+tmpfs                      5.0G     0  5.0G   0% /tmp
+/dev/nvme0n1p128            10M  1.3M  8.7M  13% /boot/efi
+tmpfs                       91M     0   91M   0% /run/user/1000
+/dev/mapper/vg00-vol_data  5.9T  5.2T  360G  94% /var/www
