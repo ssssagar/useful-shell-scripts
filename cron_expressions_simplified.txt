@@ -1,0 +1,47 @@
+Let's break down cron expressions. They're structured like this: Minute Hour Day Month DayOfWeek. So, you're essentially telling the system when to run a task.
+
+Here's what each part means:
+
+    Minute: (0-59)
+    Hour: (0-23)
+    Day of Month: (1-31)
+    Month: (1-12 or JAN-DEC) - You can use numbers or abbreviations.
+    Day of Week: (0-6 or SUN-SAT, with 0 being Sunday)
+
+Keep in mind that some systems also let you specify seconds as the first value.
+
+Here are some common examples to get you started:
+
+    Every minute: * * * * *
+    Every 5 minutes: */5 * * * *
+    Every 10 minutes: */10 * * * *
+    Every 15 minutes: */15 * * * *
+    Every 40 minutes: */40 * * * *
+    Every hour: 0 * * * *
+    Every 5 hours: 0 */5 * * *
+    Every day at midnight: 0 0 * * *
+    Every Monday at 9 AM: 0 9 * * 1
+    Every day at 4 AM: 0 4 * * *
+    Every 5th of the month at 12 AM: 0 0 5 * *
+    Every weekday at 9 AM: 0 9 * * MON-FRI
+    Every weekday at 9 AM: 0 9 * * 1-5
+    Every Sunday at 5 PM: 0 17 * * 0
+    Every Sunday at 5 PM: 0 17 * * SUN
+    Every 1st and 15th of the month at 1 AM: 0 1 1,15 * *
+    Every 1st January at 12 AM: 0 0 1 JAN *
+    Every 1st January at 12 AM: 0 0 1 1 *
+
+And here are some less common, but still useful, expressions:
+
+    Every second (if supported): * * * * * *
+    Every 10 seconds (if supported): */10 * * * * *
+    Every 50 minutes past the hour: 50 * * * *
+    Every 10 minutes between 9 AM - 5 PM: */10 9-17 * * *
+    Every 3rd Monday at 7 AM: 0 7 * * */3
+    Every 3rd day at 4 AM: 0 4 */3 * *
+    Last day of the month at 11 PM: 0 23 L * *
+    Every 10th day of the month at 1 AM: 0 1 10 * *
+    Every quarter (Jan 1, Apr 1, Jul 1, Oct 1) at 12 AM: 0 0 1 JAN,APR,JUL,OCT *
+    Every quarter (Jan 1, Apr 1, Jul 1, Oct 1) at 12 AM: 0 0 1 1,4,7,10 *
+    Every leap year on Feb 29 at midnight: 0 0 29 FEB *
+    Every leap year on Feb 29 at midnight: 0 0 29 2 *
