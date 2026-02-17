@@ -79,3 +79,10 @@ nohup ./long_running_script.sh > script_output.log 2>&1 &
 
 Example:
 nohup sudo aws s3 cp /some/path/on/file/system.zip s3://some-s3-bucket/some-folder/ > script_output.log 2>&1 &
+
+#Generate SSH KeyPair
+#Private key generation
+openssl genrsa -out my-server-access-key.key 1024
+
+#Public key generation fron private key
+openssl rsa -in my-server-access-key.key -pubout > my-server-public-key.pem
