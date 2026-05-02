@@ -1,0 +1,60 @@
+Extend the file system of EBS volumes:
+
+1.
+[ec2-user ~]$ sudo lsblk
+NAME          MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+nvme1n1       259:0    0  30G  0 disk /data
+nvme0n1       259:1    0  16G  0 disk
+└─nvme0n1p1   259:2    0   8G  0 part /
+└─nvme0n1p128 259:3    0   1M  0 part
+
+If the volume has a partition, continue to the next step (2.a).
+
+If the volume has no partitions, skip steps 2.a, 2.b, and 2.c, and continue to step 3.
+
+2.a
+[ec2-user ~]$ sudo growpart /dev/nvme0n1 1
+
+2.b
+[ec2-user ~]$ sudo lsblk
+NAME          MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+nvme1n1       259:0    0  30G  0 disk /data
+nvme0n1       259:1    0  16G  0 disk
+└─nvme0n1p1   259:2    0  16G  0 part /
+└─nvme0n1p128 259:3    0   1M  0 part
+
+3.a
+[ec2-user ~]$ df -hT
+Filesystem      Type  Size  Used Avail Use% Mounted on
+/dev/nvme0n1p1  xfs   8.0G  1.6G  6.5G  20% /
+/dev/nvme1n1    xfs   8.0G   33M  8.0G   1% /data
+
+3.b
+[XFS file system]
+[ec2-user ~]$ sudo xfs_growfs -d /
+
+3.c
+[Ext4 file system]
+[ec2-user ~]$ sudo resize2fs /dev/nvme0n1p1
+
+4
+[ec2-user ~]$ df -hT
+
+
+#Disk space clean up
+
+# Find large files
+sudo du -hx --max-depth=3 / 2>/dev/null | sort -rh | head -20
+
+# Find large files in current folder and sort them in descending order
+du -sh * | sort -h
+
+#Clear the local cache of package metadata and headers
+sudo yum clean all
+
+# Clean dnf cache (often 500MB+)
+sudo dnf clean all
+
+# Check for large logs
+sudo journalctl --disk-usage
+sudo journalctl --vacuum-size=100M
