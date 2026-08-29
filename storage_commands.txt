@@ -41,7 +41,7 @@ Filesystem      Type  Size  Used Avail Use% Mounted on
 [ec2-user ~]$ df -hT
 
 
-#Disk space clean up
+# Disk space clean up
 
 # Find large files
 sudo du -hx --max-depth=3 / 2>/dev/null | sort -rh | head -20
@@ -49,7 +49,7 @@ sudo du -hx --max-depth=3 / 2>/dev/null | sort -rh | head -20
 # Find large files in current folder and sort them in descending order
 du -sh * | sort -h
 
-#Clear the local cache of package metadata and headers
+# Clear the local cache of package metadata and headers
 sudo yum clean all
 
 # Clean dnf cache (often 500MB+)
@@ -58,3 +58,12 @@ sudo dnf clean all
 # Check for large logs
 sudo journalctl --disk-usage
 sudo journalctl --vacuum-size=100M
+
+# Modify Swap space
+sudo swapoff /swapfile
+free -h  # confirm RAM is stable before proceeding
+sudo rm /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1M count=1024 status=progress
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
